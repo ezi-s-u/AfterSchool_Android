@@ -27,8 +27,12 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         apiService = retrofit.create(APIService::class.java)
+
 //        getPosts()
-        getPost(1);
+//        getPost(1);
+//        deletePost(3);
+//        createPost();
+//        modifyPost(2, mutableMapOf("title" to "hello (modified)", "author" to "world (modified)", "conent" to "hello world (modified)"))
     }
 
     fun getPost(id : Int) {
@@ -70,30 +74,42 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    fun createPost(req : PostCreateRequest) {
-        val call = apiService.createPost(req)
-        call.enqueue(object : Callback<StringResponse> {
-            override fun onResponse( call: Call<StringResponse>, response: Response<StringResponse>) {
-                val data : StringResponse?
-            }
-
-            override fun onFailure(call: Call<StringResponse>, t: Throwable) {
-
-            }
-
-        })
-    }
+//    fun createPost() {
+//        val call = apiService.createPost(mutableMapOf("title" to "android title", "author" to "android author", "content" to "android content"))
+//        call.enqueue(object : Callback<StringResponse> {
+//            override fun onResponse( call: Call<StringResponse>, response: Response<StringResponse>) {            }
+//
+//            override fun onFailure(call: Call<StringResponse>, t: Throwable) {}
+//
+//        })
+//    }
 
     fun deletePost(id : Int) {
         val call = apiService.deletePost(id)
         call.enqueue(object : Callback<StringResponse> {
             override fun onResponse( call: Call<StringResponse>, response: Response<StringResponse>) {
+            }
+            // 네트워크가 잘못된 거 아얘 실행도 안된 것이다.
+            override fun onFailure(call: Call<StringResponse>, t: Throwable) {
 
+            }
+        })
+    }
+
+    fun modifyPost(id : Int, body : MutableMap<String, Any>) {
+        val call = apiService.modifyPost(id, body)
+        call.enqueue(object : Callback<StringResponse> {
+            override fun onResponse(call: Call<StringResponse>, response: Response<StringResponse>) {
+                var data : StringResponse? = response.body()
+                data?.let {
+                    Log.d("mytag", it.result)
+                }
             }
 
             override fun onFailure(call: Call<StringResponse>, t: Throwable) {
 
             }
+
         })
     }
 }
